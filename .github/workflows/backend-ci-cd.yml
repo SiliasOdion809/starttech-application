@@ -61,9 +61,14 @@ jobs:
             sudo docker stop starttech-backend || true
             sudo docker rm starttech-backend || true
 
-            sudo aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
+            # Get ECR login password and pipe to docker login
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
             sudo docker login --username AWS --password-stdin \
             ${{ steps.login-ecr.outputs.registry }}
+
+            #sudo aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
+            #sudo docker login --username AWS --password-stdin \
+            #${{ steps.login-ecr.outputs.registry }}
 
             sudo docker pull \
             ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
